@@ -27,6 +27,7 @@ export default function Login() {
       // Save the token in localStorage or cookies
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
+
       // Redirect to the dashboard or home page
       router.push("/notes");
     } else {
