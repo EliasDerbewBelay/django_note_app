@@ -1,16 +1,18 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Login() {
+export default function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
-  async function handleLogin(event: React.FormEvent) {
+  async function handleSignup(event: React.FormEvent) {
     event.preventDefault();
 
-    const response = await fetch("http://127.0.0.1:8000/api/token/", {
+    const response = await fetch("http://127.0.0.1:8000/api/notes/register/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,19 +26,17 @@ export default function Login() {
     const data = await response.json();
 
     if (response.ok) {
-      // Save the token in localStorage or cookies
-      localStorage.setItem("access_token", data.access);
-      localStorage.setItem("refresh_token", data.refresh);
-      router.push("/notes");
+      alert("Signup successful! Please login.");
+      router.push("/auth/login");
     } else {
-      alert("Login failed: " + data.detail);
+      setError(data.detail || "Signup failed");
     }
   }
-  return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-muted/20">
-      <h2>Login</h2>
 
-      <form onSubmit={handleLogin}>
+  return (
+    <main>
+      <h2>Sign Up</h2>
+      <form onSubmit={handleSignup}>
         <div>
           <input
             placeholder="Username"
@@ -44,18 +44,21 @@ export default function Login() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-
         <div>
           <input
-            type="password"
             placeholder="Password"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-
-        <button type="submit">Login</button>
+        <button type="submit">Sign Up</button>
       </form>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <p>
+        Already have an account? <a href="/auth/login">Login</a>
+      </p>
     </main>
   );
 }
