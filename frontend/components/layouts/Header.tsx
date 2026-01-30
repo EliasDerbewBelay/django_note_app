@@ -1,12 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, use } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { ModeToggle } from "../ui/toggleMode";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, X, Notebook } from "lucide-react";
+import {
+  Menu,
+  X,
+  Notebook,
+  LogOut,
+  User,
+  Home,
+  StickyNote,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,44 +27,38 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const router = useRouter();
+  const pathname = usePathname();
 
+  // Sync auth state whenever route changes
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     setIsLoggedIn(!!token);
-  }, []);
-
-  function syncAuth() {
-    const token = localStorage.getItem("access_token");
-    setIsLoggedIn(!!token);
-  }
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      syncAuth();
-    };
-    window.addEventListener("storage", handleStorageChange);
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
+  }, [pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
-    syncAuth();
+    setIsLoggedIn(false);
     setIsMenuOpen(false);
     router.push("/auth/login");
   };
 
-  // Navigation items
   const navItems = {
-    common: [{ href: "/", label: "Home" }],
+    common: [{ href: "/", label: "Home", icon: <Home className="h-4 w-4" /> }],
     authenticated: [
-      { href: "/notes", label: "Notes" },
-      { href: "/profile", label: "Profile" },
+      {
+        href: "/notes",
+        label: "Notes",
+        icon: <StickyNote className="h-4 w-4" />,
+      },
+      {
+        href: "/profile",
+        label: "Profile",
+        icon: <User className="h-4 w-4" />,
+      },
     ],
     unauthenticated: [
       { href: "/auth/login", label: "Login" },
@@ -65,234 +67,219 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky m-2 top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo/Brand */}
-          <div className="flex items-center">
-            <Link
-              href="/"
-              className="text-xl font-bold tracking-tight text-foreground sm:text-2xl relative inline-block group"
-            >
-              <div className="relative flex items-center gap-3">
-                {/* Elegant circular logo */}
-                <div className="relative h-12 w-12">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/5 rounded-full group-hover:from-primary/20 group-hover:to-primary/10 transition-all duration-300" />
-                  <div className="relative h-12 w-12 bg-gradient-to-br from-primary to-primary/90 rounded-full flex items-center justify-center shadow-md">
-                    <Notebook className="h-6 w-6 text-primary-foreground" />
-                  </div>
-                  {/* Small badge for "E" */}
-                  <div className="absolute -top-1 -right-1 h-5 w-5 bg-background rounded-full border-2 border-primary flex items-center justify-center">
-                    <span className="text-[10px] font-bold text-primary">
-                      E
-                    </span>
-                  </div>
-                </div>
-
-                {/* Clean text */}
-                <div className="flex flex-col items-start">
-                  <span className="text-2xl font-bold text-foreground">
-                    E-nota
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    Notes by Elias
-                  </span>
-                </div>
-              </div>
-            </Link>
-          </div>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="flex h-14 sm:h-16 items-center justify-between">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex items-center gap-2 sm:gap-3 transition-opacity hover:opacity-80"
+          >
+            <div className="h-8 w-8 sm:h-10 sm:w-10 bg-primary rounded-full flex items-center justify-center">
+              <Notebook className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
+            </div>
+            <span className="font-bold text-base sm:text-lg tracking-tight">
+              E-nota
+            </span>
+          </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            {/* Common Navigation */}
+          <nav className="hidden md:flex items-center gap-4 lg:gap-6">
             {navItems.common.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="text-sm font-medium transition-colors hover:text-primary px-2 py-1 rounded-md hover:bg-accent"
               >
                 {item.label}
               </Link>
             ))}
 
-            {/* Conditional Navigation */}
-            {isLoggedIn ? (
-              <>
-                {navItems.authenticated.map((item) => (
+            {isLoggedIn
+              ? navItems.authenticated.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    className="text-sm font-medium transition-colors hover:text-primary px-2 py-1 rounded-md hover:bg-accent"
+                  >
+                    {item.label}
+                  </Link>
+                ))
+              : navItems.unauthenticated.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="text-sm font-medium transition-colors hover:text-primary px-2 py-1 rounded-md hover:bg-accent"
                   >
                     {item.label}
                   </Link>
                 ))}
-              </>
-            ) : (
-              <>
-                {navItems.unauthenticated.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </>
-            )}
 
-            {/* Theme Toggle */}
-            <div className="ml-4">
+            <div className="flex items-center gap-2 ml-2">
               <ModeToggle />
-            </div>
 
-            {/* Authenticated User Dropdown (Desktop) */}
-            {isLoggedIn && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="relative h-8 w-8 rounded-full"
-                  >
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/avatar.png" alt="User" />
-                      <AvatarFallback>U</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/profile">Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/settings">Settings</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className="text-destructive focus:text-destructive cursor-pointer"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+              {isLoggedIn && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full h-9 w-9 border border-border hover:bg-accent"
+                    >
+                      <Avatar className="h-7 w-7">
+                        <AvatarFallback className="text-xs">U</AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                          My Account
+                        </p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                          User Profile
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild className="cursor-pointer">
+                      <Link
+                        href="/profile"
+                        className="flex items-center gap-2 w-full"
+                      >
+                        <User className="h-4 w-4" />
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="cursor-pointer">
+                      <Link
+                        href="/notes"
+                        className="flex items-center gap-2 w-full"
+                      >
+                        <StickyNote className="h-4 w-4" />
+                        Notes
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="cursor-pointer text-destructive focus:text-destructive flex items-center gap-2"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           </nav>
 
-          {/* Mobile Menu Button and Controls */}
-          <div className="flex items-center gap-4 md:hidden">
-            {/* Theme Toggle on Mobile */}
+          {/* Mobile Menu & Auth State */}
+          <div className="flex md:hidden items-center gap-2">
             <ModeToggle />
 
-            {/* Mobile Menu Sheet */}
+            {isLoggedIn && (
+              <div className="hidden sm:block">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full h-8 w-8"
+                    >
+                      <Avatar className="h-6 w-6">
+                        <AvatarFallback className="text-xs">U</AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-40">
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/profile"
+                        className="flex items-center gap-2 w-full"
+                      >
+                        <User className="h-4 w-4" />
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="text-destructive flex items-center gap-2"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
+
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden"
-                  aria-label="Toggle menu"
-                >
-                  {isMenuOpen ? (
-                    <X className="h-5 w-5" />
-                  ) : (
-                    <Menu className="h-5 w-5" />
-                  )}
+                <Button variant="ghost" size="icon" className="h-9 w-9">
+                  {isMenuOpen ? <X /> : <Menu />}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <div className="flex flex-col h-full">
-                  {/* Mobile Navigation */}
-                  <div className="flex-1 py-6">
-                    <div className="space-y-6">
-                      {/* Common Navigation */}
-                      {navItems.common.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="block text-lg font-medium transition-colors hover:text-foreground/80 py-2"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-
-                      {/* Conditional Navigation */}
-                      {isLoggedIn ? (
-                        <>
-                          {navItems.authenticated.map((item) => (
-                            <Link
-                              key={item.href}
-                              href={item.href}
-                              className="block text-lg font-medium transition-colors hover:text-foreground/80 py-2"
-                              onClick={() => setIsMenuOpen(false)}
-                            >
-                              {item.label}
-                            </Link>
-                          ))}
-                          <div className="pt-6 border-t">
-                            <Button
-                              variant="destructive"
-                              className="w-full"
-                              onClick={handleLogout}
-                            >
-                              Logout
-                            </Button>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          {navItems.unauthenticated.map((item) => (
-                            <Link
-                              key={item.href}
-                              href={item.href}
-                              className="block text-lg font-medium transition-colors hover:text-foreground/80 py-2"
-                              onClick={() => setIsMenuOpen(false)}
-                            >
-                              {item.label}
-                            </Link>
-                          ))}
-                        </>
-                      )}
-                    </div>
+              <SheetContent
+                side="right"
+                className="w-full max-w-xs sm:max-w-sm"
+              >
+                <div className="mt-8 space-y-6 px-1">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground px-3">
+                      Navigation
+                    </p>
+                    {navItems.common.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        {item.icon}
+                        {item.label}
+                      </Link>
+                    ))}
                   </div>
 
-                  {/* User Info for Mobile */}
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground px-3">
+                      {isLoggedIn ? "Account" : "Authentication"}
+                    </p>
+                    {(isLoggedIn
+                      ? navItems.authenticated
+                      : navItems.unauthenticated
+                    ).map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                      >
+                        {item.icon || <span className="h-4 w-4" />}
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+
                   {isLoggedIn && (
-                    <div className="border-t pt-6">
-                      <div className="flex items-center gap-3">
-                        <Avatar>
-                          <AvatarImage src="/avatar.png" alt="User" />
-                          <AvatarFallback>U</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium">User Name</p>
-                          <p className="text-xs text-muted-foreground">
-                            user@example.com
-                          </p>
-                        </div>
-                      </div>
+                    <div className="pt-4 border-t">
+                      <Button
+                        variant="destructive"
+                        onClick={handleLogout}
+                        className="w-full justify-start gap-3"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Logout
+                      </Button>
                     </div>
                   )}
                 </div>
               </SheetContent>
             </Sheet>
           </div>
-
-          {/* Desktop Auth Buttons for Non-Logged In Users */}
-          {!isLoggedIn && (
-            <div className="hidden md:flex items-center gap-4">
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/auth/login">Login</Link>
-              </Button>
-              <Button asChild size="sm">
-                <Link href="/auth/signup">Sign Up</Link>
-              </Button>
-            </div>
-          )}
         </div>
       </div>
     </header>
