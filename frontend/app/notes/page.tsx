@@ -50,7 +50,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Note = {
   id: number;
@@ -112,9 +112,7 @@ export default function Notes() {
   }
 
   useEffect(() => {
-    const token =
-      localStorage.getItem("access_token") ||
-      sessionStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
     if (!token) {
       router.push("/auth/login");
       return;
@@ -124,11 +122,7 @@ export default function Notes() {
       setIsLoading(true);
       setError("");
       try {
-        const res = await authFetch("http://127.0.0.1:8000/api/notes/", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
+        const res = await authFetch("http://127.0.0.1:8000/api/notes/");
 
         if (res.status === 401) {
           router.push("/auth/login");
@@ -156,9 +150,7 @@ export default function Notes() {
     e.preventDefault();
     setError("");
 
-    const token =
-      localStorage.getItem("access_token") ||
-      sessionStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
     if (!token) {
       router.push("/auth/login");
       return;
@@ -215,9 +207,7 @@ export default function Notes() {
   }
 
   async function deleteNote(id: number) {
-    const token =
-      localStorage.getItem("access_token") ||
-      sessionStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
     if (!token) return;
 
     try {
@@ -257,61 +247,6 @@ export default function Notes() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <FileText className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold">NoteFlow</h1>
-                <p className="text-sm text-muted-foreground">
-                  {filteredNotes.length}{" "}
-                  {filteredNotes.length === 1 ? "note" : "notes"}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              {/* Search */}
-              <div className="relative w-64">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="Search notes..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-
-              {/* User Profile & Logout */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full"
-                  >
-                    <span className="font-semibold">U</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem
-                    onClick={handleLogout}
-                    className="text-destructive"
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Form & Filters */}

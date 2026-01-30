@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2, Notebook, Lock, User } from "lucide-react";
@@ -47,14 +48,9 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        if (rememberMe) {
-          localStorage.setItem("access_token", data.access);
-          localStorage.setItem("refresh_token", data.refresh);
-        } else {
-          // Use sessionStorage for non-persistent login
-          sessionStorage.setItem("access_token", data.access);
-          sessionStorage.setItem("refresh_token", data.refresh);
-        }
+        localStorage.setItem("access_token", data.access);
+        localStorage.setItem("refresh_token", data.refresh);
+
         router.push("/notes");
       } else {
         setError(data.detail || "Invalid username or password");

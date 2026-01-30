@@ -1,5 +1,6 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/ui/toggleMode";
 import {
   Card,
   CardContent,
@@ -21,34 +22,6 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      {/* Navigation */}
-      <nav className="container mx-auto px-4 sm:px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <Book className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-              Notionate
-            </span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <ModeToggle />
-            <Link href="/auth/login">
-              <Button variant="ghost" className="hidden sm:inline-flex">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/auth/signup">
-              <Button className="group">
-                Get Started
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <main className="container mx-auto px-4 sm:px-6 py-12 md:py-24">
         <div className="mx-auto max-w-6xl text-center">
@@ -174,19 +147,6 @@ export default function HomePage() {
           </CardContent>
         </Card>
       </section>
-
-      {/* Footer */}
-      <footer className="container mx-auto px-4 sm:px-6 py-8 border-t border-border">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center space-x-2 mb-4 md:mb-0">
-            <Book className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">Notionate</span>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Notionate. All rights reserved.
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
