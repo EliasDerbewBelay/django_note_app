@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { authFetch } from "@/lib/authFetch";
 import {
   Search,
   Plus,
@@ -123,7 +124,7 @@ export default function Notes() {
       setIsLoading(true);
       setError("");
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/notes/", {
+        const res = await authFetch("http://127.0.0.1:8000/api/notes/", {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -141,6 +142,7 @@ export default function Notes() {
         const data = await res.json();
         setNotes(data);
       } catch (err) {
+        console.error(err);
         setError("Failed to load notes. Please try again.");
       } finally {
         setIsLoading(false);
@@ -170,7 +172,7 @@ export default function Notes() {
     try {
       if (editingId) {
         // UPDATE
-        const res = await fetch(
+        const res = await authFetch(
           `http://127.0.0.1:8000/api/notes/update/${editingId}/`,
           {
             method: "PUT",
@@ -189,7 +191,7 @@ export default function Notes() {
         setEditingId(null);
       } else {
         // CREATE
-        const res = await fetch("http://127.0.0.1:8000/api/notes/", {
+        const res = await authFetch("http://127.0.0.1:8000/api/notes/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -207,6 +209,7 @@ export default function Notes() {
       setTitle("");
       setContent("");
     } catch (err) {
+      console.error(err);
       setError("Operation failed. Please try again.");
     }
   }
@@ -218,7 +221,7 @@ export default function Notes() {
     if (!token) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/notes/${id}/`, {
+      const res = await authFetch(`http://127.0.0.1:8000/api/notes/${id}/`, {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + token,
@@ -231,6 +234,7 @@ export default function Notes() {
       setDeleteDialogOpen(false);
       setNoteToDelete(null);
     } catch (err) {
+      console.error(err);
       setError("Failed to delete note. Please try again.");
     }
   }
