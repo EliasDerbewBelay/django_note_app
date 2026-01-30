@@ -60,6 +60,7 @@ export default function Login() {
         setError(data.detail || "Invalid username or password");
       }
     } catch (err) {
+      console.error(err);
       setError("Network error. Please check your connection and try again.");
     } finally {
       setIsLoading(false);

@@ -61,3 +61,15 @@ def register(request):
     
     user = User.objects.create_user(username=username, password=password)
     return Response({"message": "User registered successfully."}, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def profile(request):
+    user = request.user
+    note_count = Note.objects.filter(user = user).count()
+
+    return Response({
+        "username": user.username,
+        "note_count": note_count
+    })

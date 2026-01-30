@@ -17,7 +17,8 @@ export async function authFetch(url: string, options: RequestInit = {}) {
     const refreshToken = localStorage.getItem("refresh_token");
 
     if (!refreshToken) {
-      throw new Error("No refresh token");
+        window.location.href = "/auth/login";
+        return response
     }
 
     const refreshResponse = await fetch(
