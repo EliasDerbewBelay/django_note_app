@@ -14,6 +14,8 @@ import {
   User,
   Home,
   StickyNote,
+  LogIn,
+  UserPlus,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -24,6 +26,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+type NavItem = {
+  href: string;
+  label: string;
+  icon?: React.ReactNode;
+};
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -61,8 +69,16 @@ export default function Header() {
       },
     ],
     unauthenticated: [
-      { href: "/auth/login", label: "Login" },
-      { href: "/auth/signup", label: "Register" },
+      {
+        href: "/auth/login",
+        label: "Login",
+        icon: <LogIn className="h-4 w-4" />,
+      },
+      {
+        href: "/auth/signup",
+        label: "Register",
+        icon: <UserPlus className="h-4 w-4" />,
+      },
     ],
   };
 
