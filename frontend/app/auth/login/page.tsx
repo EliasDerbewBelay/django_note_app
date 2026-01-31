@@ -18,6 +18,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { API_BASE } from "@/lib/api";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -34,7 +35,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/token/", {
+      const response = await fetch(`${API_BASE}/api/token/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

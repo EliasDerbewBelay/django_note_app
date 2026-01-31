@@ -1,5 +1,10 @@
+import { API_BASE } from "@/lib/api";
+
 export async function authFetch(url: string, options: RequestInit = {}) {
   const accessToken = localStorage.getItem("access_token");
+
+  // Prepend API_BASE if URL is relative
+  const fullUrl = url.startsWith("http") ? url : `${API_BASE}${url}`;
 
   // attach token
   const headers = {
@@ -7,7 +12,7 @@ export async function authFetch(url: string, options: RequestInit = {}) {
     Authorization: "Bearer " + accessToken,
   };
 
-  let response = await fetch(url, {
+  let response = await fetch(fullUrl, {
     ...options,
     headers,
   });
@@ -21,17 +26,19 @@ export async function authFetch(url: string, options: RequestInit = {}) {
       return response;
     }
 
-    const refreshResponse = await fetch(
-      "http://127.0.0.1:8000/api/token/refresh/",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refresh: refreshToken }),
-      },
-    );
+    // Use API_BASE for refresh endpoint
+    const refreshResponse = await fetch(`${API_BASE}/api/token/refresh/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
 
     if (!refreshResponse.ok) {
-      throw new Error("Refresh token invalid");
+      // Clear tokens and redirect to login
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      window.location.href = "/auth/login";
+      return response;
     }
 
     const data = await refreshResponse.json();
@@ -45,7 +52,7 @@ export async function authFetch(url: string, options: RequestInit = {}) {
       Authorization: "Bearer " + data.access,
     };
 
-    response = await fetch(url, {
+    response = await fetch(fullUrl, {
       ...options,
       headers: retryHeaders,
     });

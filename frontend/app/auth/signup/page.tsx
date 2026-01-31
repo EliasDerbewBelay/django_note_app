@@ -26,6 +26,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
+import { API_BASE } from "@/lib/api";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -101,7 +102,7 @@ export default function Signup() {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/notes/register/",
+        `${API_BASE}/api/notes/register/`,
         {
           method: "POST",
           headers: {

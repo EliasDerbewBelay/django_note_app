@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -15,6 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { API_BASE } from "@/lib/api";
 import {
   LogOut,
   User,
@@ -50,7 +50,7 @@ export default function Profile() {
     async function loadProfile() {
       try {
         setIsLoading(true);
-        const res = await authFetch("http://127.0.0.1:8000/api/notes/profile/");
+        const res = await authFetch(`${API_BASE}/api/notes/profile/`);
 
         if (!res.ok) {
           router.push("/auth/login");
