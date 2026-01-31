@@ -1,36 +1,155 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📝 E-Nota — Notes Application
 
-## Getting Started
+E-Nota is a full-stack notes application built with **Django REST Framework** and **Next.js**.
+It allows users to securely register, log in, and manage personal notes through a clean and responsive interface.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Features
+
+- User authentication using **JWT (access & refresh tokens)**
+- Secure login and logout
+- Create, read, update, and delete notes
+- Protected routes for authenticated users
+- Dynamic UI updates based on authentication state
+- Responsive design (desktop & mobile)
+- Clean and modern user interface
+
+---
+
+## 🛠 Tech Stack
+
+### Backend
+
+- Django
+- Django REST Framework
+- Simple JWT
+- SQLite (development database)
+
+### Frontend
+
+- Next.js (App Router)
+- React
+- TypeScript
+- Tailwind CSS
+- Shadcn/UI
+
+---
+
+## 📁 Project Structure
+
+```
+django_note_app/
+├── backend/
+│   ├── backend/        # Django project settings
+│   ├── notes/          # Notes app
+│   ├── manage.py
+│   └── db.sqlite3
+│
+├── frontend/
+│   ├── app/            # Next.js app router
+│   ├── components/
+│   └── public/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Setup Instructions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1️⃣ Clone the Repository
 
-## Learn More
+```bash
+git clone <your-repo-url>
+cd django_note_app
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2️⃣ Backend Setup (Django)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Create and activate virtual environment
 
-## Deploy on Vercel
+```bash
+cd backend
+python -m venv venv
+venv\Scripts\activate   # Windows
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### Install dependencies
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pip install django djangorestframework djangorestframework-simplejwt django-cors-headers
+```
+
+#### Run migrations
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+#### Start backend server
+
+```bash
+python manage.py runserver
+```
+
+Backend runs on:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+### 3️⃣ Frontend Setup (Next.js)
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend runs on:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 🔐 Authentication Flow
+
+- User logs in with username and password
+- Backend returns **access** and **refresh** tokens
+- Tokens are stored in `localStorage`
+- Protected API requests use the access token
+- UI updates dynamically based on login state
+
+---
+
+## 🧪 Status
+
+✅ UI cleaned and finalized
+✅ Authentication working correctly
+✅ Notes CRUD fully functional
+✅ Tested across all major flows
+
+---
+
+## 📌 Future Improvements
+
+- Password reset
+- User profile enhancements
+- Pagination & search for notes
+- Deployment setup
+- Role-based permissions
+
+---
+
+## 👤 Author
+
+**Elias**
+Built as a full-stack learning and productivity project.
+
+---
