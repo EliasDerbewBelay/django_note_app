@@ -12,8 +12,6 @@ import {
   Mail,
   MapPin,
   Phone,
-  Instagram,
-  Twitter,
   Heart,
   Notebook,
 } from "lucide-react";
@@ -25,42 +23,21 @@ export default function Footer() {
     {
       name: "LinkedIn",
       icon: <Linkedin className="h-5 w-5" />,
-      url: "https://linkedin.com/in/yourusername",
+      url: "https://www.linkedin.com/in/elias-derbew-b9171b3a5/",
       color: "hover:text-[#0A66C2]",
     },
     {
       name: "GitHub",
       icon: <Github className="h-5 w-5" />,
-      url: "https://github.com/yourusername",
+      url: "https://github.com/EliasDerbewBelay",
       color: "hover:text-gray-900 dark:hover:text-gray-100",
     },
     {
       name: "Telegram",
       icon: <Send className="h-5 w-5" />,
-      url: "https://t.me/yourusername",
+      url: "https://t.me/Eliasdevstack",
       color: "hover:text-[#0088cc]",
     },
-    {
-      name: "Twitter",
-      icon: <Twitter className="h-5 w-5" />,
-      url: "https://twitter.com/yourusername",
-      color: "hover:text-[#1DA1F2]",
-    },
-    {
-      name: "Instagram",
-      icon: <Instagram className="h-5 w-5" />,
-      url: "https://instagram.com/yourusername",
-      color: "hover:text-[#E4405F]",
-    },
-  ];
-
-  const quickLinks = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Services", href: "/services" },
-    { name: "Portfolio", href: "/portfolio" },
-    { name: "Blog", href: "/blog" },
-    { name: "Contact", href: "/contact" },
   ];
 
   const legalLinks = [
@@ -72,17 +49,17 @@ export default function Footer() {
   const contactInfo = [
     {
       icon: <Mail className="h-4 w-4" />,
-      text: "elias@example.com",
-      href: "mailto:elias@example.com",
+      text: "eliasderbewbly@example.com",
+      href: "mailto:eliasderbewbly@example.com",
     },
     {
       icon: <Phone className="h-4 w-4" />,
-      text: "+1 (555) 123-4567",
-      href: "tel:+15551234567",
+      text: "+251975612114",
+      href: "tel:+251975612114",
     },
     {
       icon: <MapPin className="h-4 w-4" />,
-      text: "San Francisco, CA",
+      text: "Addis Ababa, Ethiopia",
       href: "#",
     },
   ];
@@ -99,7 +76,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           {/* Brand & Description */}
-          <div className="space-y-4">
+          <div className="space-y-4 lg:col-span-2">
             <div className="flex items-center">
               <Link
                 href="/"
@@ -132,7 +109,7 @@ export default function Footer() {
                 </div>
               </Link>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground max-w-lg">
               Full Stack Developer passionate about creating beautiful,
               functional web applications. Always learning, always building.
             </p>
@@ -158,23 +135,6 @@ export default function Footer() {
               <p className="text-sm text-muted-foreground mb-2">Theme</p>
               <ModeToggle />
             </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
 
           {/* Contact Information */}
