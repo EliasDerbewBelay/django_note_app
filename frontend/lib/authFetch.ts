@@ -17,8 +17,8 @@ export async function authFetch(url: string, options: RequestInit = {}) {
     const refreshToken = localStorage.getItem("refresh_token");
 
     if (!refreshToken) {
-        window.location.href = "/auth/login";
-        return response
+      window.location.href = "/auth/login";
+      return response;
     }
 
     const refreshResponse = await fetch(
@@ -27,7 +27,7 @@ export async function authFetch(url: string, options: RequestInit = {}) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refresh: refreshToken }),
-      }
+      },
     );
 
     if (!refreshResponse.ok) {
