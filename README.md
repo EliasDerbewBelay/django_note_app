@@ -137,13 +137,7 @@ http://localhost:3000
 
 ---
 
-## 📌 Future Improvements
-
-- Password reset
-- User profile enhancements
-- Pagination & search for notes
-- Deployment setup
-- Role-based permissions
+[Live Demo](https://e-nota.vercel.app/)
 
 ---
 
