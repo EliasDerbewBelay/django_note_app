@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Your App Name", // Update with your actual app name
-  description: "Your app description", // Update with your actual description
+  title: "E-nota", 
+  description: "note taking web application", 
 };
 
 export default function RootLayout({
